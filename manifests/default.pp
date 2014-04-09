@@ -11,4 +11,12 @@ package {
   ensure => latest
 }
 
-include pkgsign
+class { 'Pkgsign':
+  user => 'vagrant',
+  fullname => 'Alastair Rankine',
+  email => 'alastair@girtby.net'
+}
+
+# TODO:
+# apt-get upgrade -y
+# sudo pbuilder create --components "main universe"
