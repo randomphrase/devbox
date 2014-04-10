@@ -5,8 +5,7 @@ Class['apt::update'] -> Package <| |>
 
 # Important utilities
 package {
-  ['curl',
-   'make',
+  ['pbuilder',
    'ubuntu-dev-tools']:
   ensure => latest
 }
@@ -17,6 +16,14 @@ class { 'Pkgsign':
   email => 'alastair@girtby.net'
 }
 
-# TODO:
-# apt-get upgrade -y
-# sudo pbuilder create --components "main universe"
+Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
+
+exec { 'pbuilder-create':
+  creates => '/var/cache/pbuilder/base.tgz',
+  command => 'pbuilder create --components "main universe"',
+  timeout => 500,
+  require => Package['pbuilder'],
+  #refresh => 'sudo pbuilder update',
+}
+
+# TODO: get the latest security updates before calling pbuilder create?
